@@ -1,0 +1,7 @@
+.env
+The-Flask-Mega-Tutorial/ 
+env/
+__*
+*.zip
+*.rar
+!__init__.py

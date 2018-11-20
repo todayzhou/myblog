@@ -1,0 +1,165 @@
+{% extends '/bootstrap/base.html' %}
+
+{# title/navbar/context都是bootstrap模板的block，这里需要填充 #}
+{% block title %}
+    {% if title %}{{ title }} - Myblog{% else %}Welcome to Myblog{% endif %}
+{% endblock %}
+
+{% block navbar %}
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{{ url_for('main.index') }}">Myblog</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="{{ url_for('main.index') }}">{{ _('Home') }}</a></li>
+                    <li><a href="{{ url_for('main.explore') }}">{{ _('Explore') }}</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if current_user.is_anonymous %}
+                    <li><a href="{{ url_for('auth.login') }}">{{ _('Login') }}</a></li>
+                    {% else %}
+                    <li><a href="{{ url_for('main.user', username=current_user.username) }}">{{ _('Profile') }}</a></li>
+                    <li><a href="{{ url_for('main.messages') }}">
+                        {{ _('messages') }}
+                        {% set new_messages = current_user.new_messages() %}
+                        <span id="message_count" class="badge"
+                              style="visibility: {% if new_messages %}visible{% else %}hidden{% endif %}">
+                            {{ new_messages }}
+                        </span>
+                    </a></li>
+                    <li><a href="{{ url_for('auth.logout') }}">{{ _('Logout') }}</a></li>
+                    {% endif %}
+                </ul>
+                {% if g.search_form %}
+                <form class="navbar-form navbar-right" method="get"
+                    action="{{ url_for('main.search') }}">
+                    <div class="form-group">
+                        {{ g.search_form.q(size=20, class='form-control',
+                                placeholder=g.search_form.q.label.text) }}
+                    </div>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% with messages=get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-info" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+        {# application content needs to be provided in the app_content block #}
+        {% block app_content %}{% endblock %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }} {# 保留base内原有的scripts内容不变，在次基础上增加 #}
+    {{ moment.lang(g.locale) }} {# moment.js的多语言展示 #}
+    {{ moment.include_moment() }}
+
+    <script>
+        // 翻译,直接定义成函数，需要额外调用才能生效
+        function translate(srcElem, dstElem, src_lang, dst_lang) {
+            $(dstElem).html('<img src="{{ url_for('static', filename='loading.gif') }}">');{# 先把提供一个翻译中的加载gif #}
+            {# 发起一个post请求，指定url和表单参数,根据成功或者失败的结果直接写入翻译后的dom中 #}
+            $.post('/translate', {
+                text: $(srcElem).text(),
+                src_lang: src_lang,
+                dst_lang: dst_lang
+            }).done(function(response) {
+                $(dstElem).text(response['text'])
+            }).fail(function() {
+                $(dstElem).text("{{ _('Error: Could not contact server.') }}");
+            });
+        }
+
+        // 消息动态
+        function set_message_count(n) {
+            $('#message_count').text(n);
+            $('#message_count').css('visibility', n ? 'visible' : 'hidden')
+        }
+
+        // 直接使用jquery，在页面加载的时候会自动注册生效
+        $(function () {
+            var since = 0;
+            setInterval(function () {
+                $.ajax("{{ url_for('main.notifications') }}?since="+since).done(
+                    function (response) {
+                        for (var i=0; i < response.length; i++) {
+                            if (response[i].name == 'unread_messages_count') {
+                                set_message_count(response[i].data)
+                            }
+                            since = response[i].timestamp
+                        }
+                    }
+                );
+            }, 30000);
+        });
+
+        //setInterval(function () {mess()}, 10000);
+        //function mess() {
+        //    $.get('/get_message_count').done(function (response) {
+        //        $('#message_count').text(response['text']);
+        //        $('#message_count').css('visibility', response['text'] ? 'visible' : 'hidden')
+        //    });
+        //}
+
+
+        // 弹窗显示个人资料
+        $(function () {  // 定义一个jquery，刚开始就是一个function是为了在整个页面加载完成以后才执行后面的代码
+            var timer = null;
+            var xhr = null;
+            $('.user_group').hover(  // 定义鼠标移入移出事件，第一个函数是移入事件，第二个函数是移出事件
+                function (event) {  // 参数就是这个鼠标移入的事件
+                    // mouse in event handler
+                    var elem = $(event.currentTarget);  // event.currentTarget == this 即当前的元素，比如 <p> ... </p>
+                    timer = setTimeout(function () {  // 设置1秒的延迟，延迟过后调用第一个参数里面的函数,这是html window对象的方法，即等同于 window.setTimeout()，代表当前打开的浏览器窗口
+                        timer = null;
+                        xhr = $.ajax(  // 发起异步请求，可比get或者post方法实现更多的功能
+                            '/user/'+elem.first().text().trim()+'/popup'
+                        ).done(function (data) {  // promise 回调, 请求的响应内容就作为回调函数的参数
+                            xhr = null;
+                            elem.popover({  // bootstrap 实现的在元素附近弹窗
+                                trigger: 'manual',  // 手动方式触发
+                                html: true,  // 以html展示
+                                animation: false,  // 不用淡入淡出的效果
+                                container: elem,  //
+                                content: data  // 将接收到的内容作为展示
+                            }).popover('show');  // 使窗口显示
+                            flask_moment_render_all();  // 在ajax中调用moment显示时间的时候，需要调用这个来适当的显示
+                        })
+                    }, 1000);
+                },
+                function (event) {  // 鼠标移出的取消操作
+                    // mouse out event handler
+                    var elem = $(event.currentTarget);
+                    if (timer) {
+                        clearTimeout(timer);
+                        timer = null;
+                    }
+                    else if (xhr) {
+                        xhr.abort();  // 停止忽略后续的请求
+                        xhr = null;
+                    }
+                    else {  // 在取消定时器和请求以后撤销弹窗
+                        elem.popover('destroy')
+                    }
+                }
+            )
+        })
+    </script>
+{% endblock %}

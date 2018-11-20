@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+
+<script type="text/javascript">
+    function set_openid(openid, pr) {
+        u = openid.search('<username>')
+        if (u != -1) {
+            user = prompt('Enter your ' + pr + ' username:')
+            openid = openid.substr(0, u) + user
+        }
+        form = document.forms['login'];
+        form.elements['openid'].value = openid
+    }
+</script>
+
+<h1>Sign In</h1>
+<form action="" method="post" name="login">
+    {{ form.hidden_tag() }}
+    <p>
+        Please enter your Account:<br>
+        {{ form.username.label }}<br>
+        {{ form.username(size=32) }}
+        {% for error in form.username.errors %}}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}<br>
+    </p>
+    <p>
+        {{ form.password.label }}<br>
+        {{ form.password(size=32) }}
+        {% for error in form.password.errors %}}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}<br>
+    </p>
+    <p>
+        Forgot your Password?
+        <a href="{{ url_for('reset_password_request') }}">Click Here.</a>
+    </p>
+    <p>{{ form.remember_me() }} {{ form.remember_me.label}}</p>
+    <p>{{ form.submit() }}</p>
+    <p>New User? <a href="{{ url_for('register') }}">Click to Register!</a></p>
+</form>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html'  as wtf%}{# 导入bootstrap的宏用来快速渲染表单 #}
+
+{% block app_content %}
+
+<script type="text/javascript">
+    function set_openid(openid, pr) {
+        u = openid.search('<username>')
+        if (u != -1) {
+            user = prompt('Enter your ' + pr + ' username:')
+            openid = openid.substr(0, u) + user
+        }
+        form = document.forms['login'];
+        form.elements['openid'].value = openid
+    }
+</script>
+
+<h1>{{ _('Sign In') }}</h1>
+    <p>{{ _('Please enter your Account:') }}<br></p>
+    <div class="row">
+        <div class="col-md-4">
+            {{ wtf.quick_form(form) }}
+        </div>
+    </div>
+    <p>
+        {{ _('Forgot your Password?') }}
+        <a href="{{ url_for('auth.reset_password_request') }}">{{ _('Click Here.') }}</a>
+    </p>
+    <p>{{ _('New User?') }} <a href="{{ url_for('auth.register') }}">{{ _('Click to Register!') }}</a></p>
+{% endblock %}

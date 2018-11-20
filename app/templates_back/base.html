@@ -1,0 +1,26 @@
+{% extends '/bootstrap/base.html' %}
+
+{# title/navbar/context都是bootstrap模板的block，这里需要填充 #}
+{% block title %}
+    {% if title %}{{ title }} - Myblog{% else %}Welcome to Myblog{% endif %}
+{% endblock %}
+
+{% block navbar %}
+    <nav class="navbar navbar-default">
+
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% with messages=get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-info" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+        {# application content needs to be provided in the app_content block #}
+        {% block app_content %}{% endblock %}
+    </div>
+{% endblock %}
