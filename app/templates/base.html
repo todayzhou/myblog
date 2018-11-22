@@ -54,14 +54,26 @@
 
 {% block content %}
     <div class="container">
+        {# 警告 #}
         {% with messages=get_flashed_messages() %}
         {% if messages %}
             {% for message in messages %}
-            <div class="alert alert-info" role="alert">{{ message }}</div>
+                <div class="alert alert-info" role="alert">{{ message }}</div>
             {% endfor %}
         {% endif %}
         {% endwith %}
-        {# application content needs to be provided in the app_content block #}
+        {# 任务进度 #}
+        {% with tasks = current_user.tasks.filter_by(complete=False).all() %}
+        {% if tasks %}
+            {% for task in tasks %}
+                <div class="alert alert-success" role="alert">
+                    {{ task.description }}
+                    <span id="{{ task.id }}">{{ task.get_progress() }}</span>
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+        {# body内容 #}
         {% block app_content %}{% endblock %}
     </div>
 {% endblock %}
@@ -87,12 +99,14 @@
             });
         }
 
-        // 消息动态
+        // 消息动态&后台进度提示
         function set_message_count(n) {
             $('#message_count').text(n);
             $('#message_count').css('visibility', n ? 'visible' : 'hidden')
         }
-
+        function set_task_progress(id, progress) {
+            $(id).text(progress)
+        }
         // 直接使用jquery，在页面加载的时候会自动注册生效
         $(function () {
             var since = 0;
@@ -100,14 +114,19 @@
                 $.ajax("{{ url_for('main.notifications') }}?since="+since).done(
                     function (response) {
                         for (var i=0; i < response.length; i++) {
-                            if (response[i].name == 'unread_messages_count') {
-                                set_message_count(response[i].data)
+                            switch (response[i].name) {
+                                case 'unread_messages_count':
+                                    set_message_count(response[i].data);
+                                    break;
+                                case 'task_progress':
+                                    set_task_progress('#'+response[i].data.task_id, response[i].data.progress);
+                                    break;
                             }
                             since = response[i].timestamp
                         }
                     }
                 );
-            }, 30000);
+            }, 5000);
         });
 
         //setInterval(function () {mess()}, 10000);
@@ -160,6 +179,10 @@
                     }
                 }
             )
+        })
+
+        $(function () {
+
         })
     </script>
 {% endblock %}

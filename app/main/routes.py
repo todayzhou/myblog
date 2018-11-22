@@ -196,11 +196,23 @@ def notifications():
 	# since 在JavaScript中发送过来，每次刷新页面都会重置成0
 	since = request.args.get('since', 0.0, type=float)
 	notifications = current_user.notifications.filter(Notification.timestamp > since).order_by(
-		Notification.timestamp.desc()
-	)
+		Notification.timestamp.desc())
+
 	# 返回一个数组json对象
 	return jsonify([{
 		'name': n.name,
 		'data': n.get_data(),
 		'timestamp': n.timestamp
 	} for n in notifications])
+
+
+@bp.route('/export_posts')
+@login_required
+def export_posts():
+	if current_user.get_task_in_progress(name='export_posts'):
+		flash(_('An export task is currently in progress'))
+	else:
+		current_user.launch_task(name='export_posts', description='Exporting posts...')
+		flash(_('your task have been handle, please check your email late.'))
+		db.session.commit()
+	return redirect(url_for('main.user', username=current_user.username))

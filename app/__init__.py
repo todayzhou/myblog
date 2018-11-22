@@ -89,6 +89,7 @@ def create_app(config_class=Config):
 			)
 			mail_handler.setLevel(logging.ERROR)
 			app.logger.addHandler(mail_handler)
+			# app中尝试的错误信息都将会通过这个email处理器发送，在程序中需要记录的错误都添加到app.logger中，比如 app.logger.error('....', exc_info=)
 	
 	# '''记录日志到文件'''
 	if not app.debug and 0:

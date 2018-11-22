@@ -1,0 +1,7 @@
+Dear {{ user.username }},
+你好!
+Please find attached the archive of your posts that you requested.
+
+Sincerely,
+
+The myblog Team

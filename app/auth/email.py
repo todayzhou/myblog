@@ -16,6 +16,8 @@ def send_email(subject, sender, receiver, text_body, html_body, attachments=None
 	if attachments:
 		for attachment in attachments:
 			msg.attach(*attachment)
+	# with open('/home/zhou/py_tools/myblog/123', 'rb') as fp:
+	# 	msg.attach('123.txt', 'text/plain', fp.read())
 	if sync:
 		mail.send(msg)
 	else:

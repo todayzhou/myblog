@@ -199,7 +199,7 @@ class Task(db.Model):
 
 	def get_progress(self):
 		job = self.get_rq_job()
-		return job.meta.get('progress', 0) if job is not None else 100
+		return job.meta.get('progress', '0%') if job is not None else 100
 
 
 # '''user_loader回调,被Flask-Login使用获取用户id,在执行current_user的时候会加载，此时db.session已经产生'''

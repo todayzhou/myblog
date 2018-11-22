@@ -9,6 +9,9 @@
             {% if user.last_seen %}<p>{{ _('Last seen on:') }}{{ moment(user.last_seen).fromNow() }}</p>{% endif %}
             {% if user==current_user %}
                 <p><a href="{{ url_for('main.edit_profile') }}">{{ _('Edit Profile') }}</a></p>
+                {% if not current_user.get_task_in_progress('export_posts') %}
+                    <p><a href="{{ url_for('main.export_posts') }}">{{ _('Export posts.') }}</a></p>
+                {% endif %}
             {% elif current_user.is_following(user) %}
                 <p><a href="{{ url_for('main.unfollow', username=user.username) }}">{{ _('Unfollow') }}</a></p>
             {% else %}
