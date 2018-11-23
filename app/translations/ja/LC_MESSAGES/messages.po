@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-11-17 16:31+0800\n"
+"POT-Creation-Date: 2018-11-23 11:24+0800\n"
 "PO-Revision-Date: 2018-11-07 19:49+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ja\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.6.0\n"
 
-#: app/__init__.py:22
+#: app/__init__.py:24
 msgid "Please log in to access this page."
 msgstr ""
 
@@ -162,16 +162,24 @@ msgstr ""
 msgid "you can not send message to yourself."
 msgstr ""
 
-#: app/main/routes.py:167
+#: app/main/routes.py:168
 msgid "your message have been send."
 msgstr ""
 
-#: app/main/routes.py:169
+#: app/main/routes.py:170
 msgid "Send message"
 msgstr ""
 
-#: app/main/routes.py:189 app/templates/messages.html:4
+#: app/main/routes.py:188 app/templates/messages.html:4
 msgid "Messages"
+msgstr ""
+
+#: app/main/routes.py:213
+msgid "An export task is currently in progress"
+msgstr ""
+
+#: app/main/routes.py:216
+msgid "your task have been handle, please check your email late."
 msgstr ""
 
 #: app/templates/_post.html:13
@@ -194,15 +202,15 @@ msgstr ""
 msgid "Profile"
 msgstr ""
 
-#: app/templates/base.html:30
+#: app/templates/base.html:31
 msgid "messages"
 msgstr ""
 
-#: app/templates/base.html:31
+#: app/templates/base.html:38
 msgid "Logout"
 msgstr ""
 
-#: app/templates/base.html:78
+#: app/templates/base.html:98
 msgid "Error: Could not contact server."
 msgstr ""
 
@@ -210,19 +218,19 @@ msgstr ""
 msgid "Edit Profile:"
 msgstr ""
 
-#: app/templates/index.html:20 app/templates/user.html:32
+#: app/templates/index.html:20 app/templates/user.html:35
 msgid "Newer posts"
 msgstr ""
 
-#: app/templates/index.html:25 app/templates/user.html:37
+#: app/templates/index.html:25 app/templates/user.html:40
 msgid "Older posts"
 msgstr ""
 
-#: app/templates/messages.html:12
+#: app/templates/messages.html:13
 msgid "Newer messages"
 msgstr ""
 
-#: app/templates/messages.html:17
+#: app/templates/messages.html:18
 msgid "Older messages"
 msgstr ""
 
@@ -251,23 +259,27 @@ msgstr ""
 msgid "Last seen on:"
 msgstr ""
 
-#: app/templates/user.html:13 app/templates/user_popup.html:16
+#: app/templates/user.html:13
+msgid "Export posts."
+msgstr ""
+
+#: app/templates/user.html:16 app/templates/user_popup.html:16
 msgid "Unfollow"
 msgstr ""
 
-#: app/templates/user.html:15 app/templates/user_popup.html:18
+#: app/templates/user.html:18 app/templates/user_popup.html:18
 msgid "Follow"
 msgstr ""
 
-#: app/templates/user.html:17 app/templates/user_popup.html:13
+#: app/templates/user.html:20 app/templates/user_popup.html:13
 msgid "Followed:"
 msgstr ""
 
-#: app/templates/user.html:17 app/templates/user_popup.html:13
+#: app/templates/user.html:20 app/templates/user_popup.html:13
 msgid "Followers:"
 msgstr ""
 
-#: app/templates/user.html:19
+#: app/templates/user.html:22
 msgid "send message"
 msgstr ""
 

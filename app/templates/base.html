@@ -67,7 +67,7 @@
         {% if tasks %}
             {% for task in tasks %}
                 <div class="alert alert-success" role="alert">
-                    {{ task.description }}
+                    {{ _(task.description) }}
                     <span id="{{ task.id }}">{{ task.get_progress() }}</span>
                 </div>
             {% endfor %}

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-11-17 16:31+0800\n"
+"POT-Creation-Date: 2018-11-23 11:24+0800\n"
 "PO-Revision-Date: 2018-11-05 23:12+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.6.0\n"
 
-#: app/__init__.py:22
+#: app/__init__.py:24
 msgid "Please log in to access this page."
 msgstr "请登录以后再访问这个页面。"
 
@@ -160,19 +160,27 @@ msgstr "搜索"
 
 #: app/main/routes.py:160
 msgid "you can not send message to yourself."
-msgstr ""
+msgstr "你不能发送消息给自己。"
 
-#: app/main/routes.py:167
+#: app/main/routes.py:168
 msgid "your message have been send."
 msgstr "你的消息已经被发送。"
 
-#: app/main/routes.py:169
+#: app/main/routes.py:170
 msgid "Send message"
 msgstr "发送消息"
 
-#: app/main/routes.py:189 app/templates/messages.html:4
+#: app/main/routes.py:188 app/templates/messages.html:4
 msgid "Messages"
 msgstr "消息"
+
+#: app/main/routes.py:213
+msgid "An export task is currently in progress"
+msgstr "当前已经存在一个导出微博任务。"
+
+#: app/main/routes.py:216
+msgid "your task have been handle, please check your email late."
+msgstr "你的任务已经提交处理，请稍后检查你的邮箱。"
 
 #: app/templates/_post.html:13
 msgid "sayd"
@@ -194,15 +202,15 @@ msgstr "登录"
 msgid "Profile"
 msgstr "我"
 
-#: app/templates/base.html:30
+#: app/templates/base.html:31
 msgid "messages"
 msgstr "消息"
 
-#: app/templates/base.html:31
+#: app/templates/base.html:38
 msgid "Logout"
 msgstr "登出"
 
-#: app/templates/base.html:78
+#: app/templates/base.html:98
 msgid "Error: Could not contact server."
 msgstr "错误：不能连接服务器。"
 
@@ -210,19 +218,19 @@ msgstr "错误：不能连接服务器。"
 msgid "Edit Profile:"
 msgstr "编辑资料"
 
-#: app/templates/index.html:20 app/templates/user.html:32
+#: app/templates/index.html:20 app/templates/user.html:35
 msgid "Newer posts"
 msgstr "更新的日志"
 
-#: app/templates/index.html:25 app/templates/user.html:37
+#: app/templates/index.html:25 app/templates/user.html:40
 msgid "Older posts"
 msgstr "以前的日志"
 
-#: app/templates/messages.html:12
+#: app/templates/messages.html:13
 msgid "Newer messages"
 msgstr "更新的消息"
 
-#: app/templates/messages.html:17
+#: app/templates/messages.html:18
 msgid "Older messages"
 msgstr "以前的消息"
 
@@ -251,23 +259,27 @@ msgstr "关于我："
 msgid "Last seen on:"
 msgstr "最后一次登录："
 
-#: app/templates/user.html:13 app/templates/user_popup.html:16
+#: app/templates/user.html:13
+msgid "Export posts."
+msgstr "导出微博"
+
+#: app/templates/user.html:16 app/templates/user_popup.html:16
 msgid "Unfollow"
 msgstr "取消关注"
 
-#: app/templates/user.html:15 app/templates/user_popup.html:18
+#: app/templates/user.html:18 app/templates/user_popup.html:18
 msgid "Follow"
 msgstr "关注"
 
-#: app/templates/user.html:17 app/templates/user_popup.html:13
+#: app/templates/user.html:20 app/templates/user_popup.html:13
 msgid "Followed:"
 msgstr "关注了："
 
-#: app/templates/user.html:17 app/templates/user_popup.html:13
+#: app/templates/user.html:20 app/templates/user_popup.html:13
 msgid "Followers:"
 msgstr "关注者："
 
-#: app/templates/user.html:19
+#: app/templates/user.html:22
 msgid "send message"
 msgstr "发送消息"
 
