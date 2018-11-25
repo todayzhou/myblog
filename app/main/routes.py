@@ -4,10 +4,12 @@ from flask import render_template, flash, redirect, url_for, request, g, jsonify
 from flask_login import current_user, login_required
 from datetime import datetime
 from .forms import EditProfileForm, PostForm, SearchForm, MessageForm
-from app.models import User, Post, Message, Notification
+from app.models import User, Post, Message, Notification, Files
 from guess_language import guess_language
 from flask_babel import get_locale, _
 from app.translate import translate
+from werkzeug.utils import secure_filename
+import os
 
 
 @bp.route('/', methods=['GET', 'POST'])
@@ -216,3 +218,28 @@ def export_posts():
 		flash(_('your task have been handle, please check your email late.'))
 		db.session.commit()
 	return redirect(url_for('main.user', username=current_user.username))
+
+
+@bp.route('/upload', methods=['GET', 'POST'])
+@login_required
+def upload_file():
+	if request.method == 'POST':
+		file = request.files['file']
+		if file and Files.allowed_file(file.filename):
+			filename = secure_filename(file.filename)
+			file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+			admin = User.query.filter_by(username='system').first()
+			mess = Message(author=admin, receiver=current_user, body=_('You uploaded a file: %(filename)s',
+																	filename=filename))
+			db.session.add(mess)
+			db.session.commit()
+			flash(_('your file have been upload.'))
+			# return redirect(url_for('uploaded_file', filename=filename))
+			return redirect(url_for('main.messages'))
+	return render_template('upload.html', title=_('Upload files.'))
+
+
+@bp.route('/processed', methods=['GET'])
+@login_required
+def processed_file():
+	pass

@@ -43,3 +43,6 @@ class MessageForm(FlaskForm):
 	message = TextAreaField(_l('message'), validators=[DataRequired(), Length(min=1, max=140)])
 	submit = SubmitField('submit')
 
+
+class UploadForm(FlaskForm):
+	pass

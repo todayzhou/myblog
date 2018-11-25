@@ -63,16 +63,19 @@
         {% endif %}
         {% endwith %}
         {# 任务进度 #}
-        {% with tasks = current_user.tasks.filter_by(complete=False).all() %}
-        {% if tasks %}
-            {% for task in tasks %}
-                <div class="alert alert-success" role="alert">
-                    {{ _(task.description) }}
-                    <span id="{{ task.id }}">{{ task.get_progress() }}</span>
-                </div>
-            {% endfor %}
+        {% if not current_user.is_anonymous %}
+            <span class="authticated"></span>
+            {% with tasks = current_user.tasks.filter_by(complete=False).all() %}
+            {% if tasks %}
+                {% for task in tasks %}
+                    <div class="alert alert-success" role="alert">
+                        {{ _(task.description) }}
+                        <span id="{{ task.id }}">{{ task.get_progress() }}</span>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
         {% endif %}
-        {% endwith %}
         {# body内容 #}
         {% block app_content %}{% endblock %}
     </div>
@@ -111,21 +114,24 @@
         $(function () {
             var since = 0;
             setInterval(function () {
-                $.ajax("{{ url_for('main.notifications') }}?since="+since).done(
-                    function (response) {
-                        for (var i=0; i < response.length; i++) {
-                            switch (response[i].name) {
-                                case 'unread_messages_count':
-                                    set_message_count(response[i].data);
-                                    break;
-                                case 'task_progress':
-                                    set_task_progress('#'+response[i].data.task_id, response[i].data.progress);
-                                    break;
+                var auth = $('span').hasClass('authticated');  // 在已经有账户登录的情况下才获取通知
+                if (auth) {
+                    $.ajax("{{ url_for('main.notifications') }}?since=" + since).done(
+                        function (response) {
+                            for (var i = 0; i < response.length; i++) {
+                                switch (response[i].name) {
+                                    case 'unread_messages_count':
+                                        set_message_count(response[i].data);
+                                        break;
+                                    case 'task_progress':
+                                        set_task_progress('#' + response[i].data.task_id, response[i].data.progress);
+                                        break;
+                                }
+                                since = response[i].timestamp
                             }
-                            since = response[i].timestamp
                         }
-                    }
-                );
+                    );
+                }
             }, 5000);
         });
 

@@ -65,10 +65,11 @@ def create_app(config_class=Config):
 	from app.errors import bp as errors_bp
 	from app.auth import bp as auth_bp
 	from app.main import bp as main_bp
+	from app.api import bp as api_bp
 	app.register_blueprint(errors_bp)
 	app.register_blueprint(auth_bp, url_prefix='/auth')  # url_prefix 前缀使得所有和认证相关的url前面都会加上auth目录，路由分离、直观
 	app.register_blueprint(main_bp)
-
+	app.register_blueprint(api_bp, url_prefix='/api')
 
 	# '''不开启调试模式情况下，error信息自动通过邮件发送回来'''
 	if not app.debug and 0:

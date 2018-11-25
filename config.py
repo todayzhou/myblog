@@ -9,7 +9,8 @@ class Config(object):
 	CSRF_ENABLED = True
 	SQLALCHEMY_TRACK_MODIFICATIONS = True
 	SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
-	SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db')
+	# SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db')
+	SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
 	SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 	MAIL_SERVER = os.environ.get('MAIL_SERVER')
@@ -26,3 +27,7 @@ class Config(object):
 	MS_TRANSLATOR_URL = 'https://api.cognitive.microsofttranslator.com/translate'
 
 	REDIS_URL = os.environ.get('REDIS_URL') or 'redis://'
+
+	MAX_CONTENT_LENGTH = 16 * 1024 * 1024
+	ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+	UPLOAD_FOLDER = os.path.join(basedir, 'tmp/files')
